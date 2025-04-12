@@ -1,0 +1,62 @@
+<app-navbar/>
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-purple text-white">
+            <h4 class="mb-0">Cadastro de Produto</h4>
+        </div>
+        <div class="card-body">
+            <div *ngIf="mensagem" class="alert alert-success mb-2 alert-dismissible">
+                <strong>Sucesso!</strong> {{ mensagem }}
+                <button (click)="mensagem = ''" type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+
+            <div *ngIf="mensagem_erro" class="alert alert-danger mb-2 alert-dismissible">
+                <strong>Erro!</strong> {{ mensagem_erro }}
+                <button (click)="mensagem_erro = ''" type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome do Produto</label>
+                    <input type="text" class="form-control" formControlName="nome" placeholder="Digite o nome do produto">
+                    <div class="text-danger" *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid">
+                        Por favor, informe o nome do produto com no mínimo 3 caracteres e no máximo 150 caracteres.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="preco" class="form-label">Preço</label>
+                    <input type="number" class="form-control" formControlName="preco" placeholder="Digite o preço" value="">
+                    <div class="text-danger" *ngIf="form.get('preco')?.touched && form.get('preco')?.invalid">
+                        Por favor, informe um preço para o produto até no máximo R$ 99999999,99
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="quantidade" class="form-label">Quantidade</label>
+                    <input type="number" class="form-control" formControlName="quantidade" placeholder="Digite a quantidade">
+                    <div class="text-danger" *ngIf="form.get('quantidade')?.touched && form.get('quantidade')?.invalid">
+                        Por favor, informe a quantidade do produto.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="fornecedor" class="form-label">Fornecedor</label>
+                    <select class="form-select" formControlName="fornecedorId">
+                        <option selected value="">Selecione um fornecedor</option>
+                        <!-- Opções de fornecedores serão populadas aqui -->
+                        <option *ngFor="let fornecedor of fornecedores" value="{{fornecedor.id}}">
+                            {{ fornecedor.nome | uppercase }}
+                        </option>
+                    </select>
+                    <div class="text-danger" *ngIf="form.get('fornecedorId')?.touched && form.get('fornecedorId')?.invalid">
+                        Por favor, selecione o fornecedor do produto. 
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <input type="submit" class="btn btn-success" [disabled]="form.invalid" value="Realizar Cadastro"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

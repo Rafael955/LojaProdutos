@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+.bg-purple {
+    background-color: blueviolet;
+}
+
+.btn-purple {
+    background-color: blueviolet;
+    color: white;
+    --bs-btn-hover-bg: rgb(157, 68, 240);
+    --bs-btn-hover-color: #fff;
+}

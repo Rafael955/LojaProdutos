@@ -1,0 +1,39 @@
+<div class="d-flex align-items-center justify-content-center vh-100 bg-light">
+    <div class="card shadow p-4" style="width: 22rem;">
+        <div class="card-body">
+            <img src="/assets/images/logo.png" width="100%"/>
+            <h3 class="card-title text-center mb-2 mt-2">Autenticação de usuários</h3>
+
+            <div class="text-danger text-center">
+                <strong>{{mensagem_erro}}</strong>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" (click)="LimparMensagens()">
+                <div class="mb-2">
+                    <label for="email" class="form-label">Email de acesso</label>
+                    <input type="email" formControlName="email" class="form-control" id="email" placeholder="Digite seu email" required>
+                    <div class="text-danger" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+                        Por favor, informe um endereço de email válido.
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label for="senha" class="form-label">Senha de acesso</label>
+                    <input type="password" formControlName="senha" class="form-control" id="senha" placeholder="Digite sua senha" required>
+                    <div class="text-danger" *ngIf="form.get('senha')?.touched && form.get('senha')?.invalid">
+                        Por favor, informe a senha com pelo menos 8 caracteres.
+                    </div>
+                </div>
+                <button type="submit" [disabled]="form.invalid"
+                class="btn btn-primary w-100">
+                Entrar
+            </button>
+
+            </form>
+            <button routerLink="/pages/criar-usuario" class="btn btn-secondary w-100 mt-2">
+                Crie sua conta de usuário
+            </button>
+        </div>
+    </div>
+</div>
+
+

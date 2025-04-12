@@ -1,0 +1,59 @@
+<app-navbar/>
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title text-primary">Consulta de Fornecedores</h2>
+                    <p class="card-subtitle text-muted">Confira a listagem de fornecedores cadastrados no sistema.</p>
+                    <hr>
+
+                    <div *ngIf="mensagem" class="alert alert-success mb-2 alert-dismissible">
+                        <strong>Sucesso!</strong> {{ mensagem }}
+                        <button (click)="mensagem = ''" type="button" class="btn-close" aria-label="Close"></button>
+                    </div>
+
+                    <div *ngIf="mensagem_erro" class="alert alert-danger mb-2 alert-dismissible">
+                        <strong>Erro!</strong> {{ mensagem_erro }}
+                        <button (click)="mensagem_erro = ''" type="button" class="btn-close"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nome do Fornecedor</th>
+                                    <th>Operações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let fornecedor of fornecedores | paginate: { itemsPerPage: 10, currentPage: p}">
+                                    <td>{{ fornecedor.nome | uppercase }}</td>
+                                    <td>
+                                        <button [routerLink]="['/pages/editar-fornecedor', fornecedor.id]"
+                                            class="btn btn-outline-primary btn-sm me-2">
+                                            Editar
+                                        </button>
+                                        <button (click)="onDelete(fornecedor.id)"
+                                            class="btn btn-outline-danger btn-sm ">Excluir</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6">
+                                        Número de Registros: {{ fornecedores.length }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="d-flex justify-content-center">
+                            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
