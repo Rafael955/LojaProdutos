@@ -22,12 +22,15 @@ export class ConsultarProdutosComponent {
   mensagem: string = '';
   mensagem_erro: string = '';
   produtos: any[] = [];
+  usuario_logado: any;
 
   p: number = 1;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
+    this.usuario_logado = JSON.parse(sessionStorage.getItem('usuario') as string);
+
     this.http.get(config.produtosapi_produtos + '/listar-produtos')
       .subscribe({
         next: (data: any) => {
@@ -43,9 +46,6 @@ export class ConsultarProdutosComponent {
 
   onDelete(id: string) {
 
-    const usuario = JSON.parse(sessionStorage.getItem('usuario') as string);
-
-    if (usuario.Perfil === 'ADMINISTRADOR') {
       if (confirm('Deseja realmente excluir o produto desejado?')) {
         this.http.delete(`${config.produtosapi_produtos}/excluir-produto/${id}`)
           .subscribe({
@@ -60,8 +60,5 @@ export class ConsultarProdutosComponent {
             }
           })
       }
-    } else {
-      location.href = 'errors/unauthorized';
-    }
   }
 }

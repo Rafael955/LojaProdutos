@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-unauthorized',
@@ -8,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class UnauthorizedComponent {
 
+  constructor(private location: Location) { }
+  
+  LocationBack() {
+    this.location.back();
+  }
 }

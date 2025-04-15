@@ -36,7 +36,7 @@
                                             Editar
                                         </button>
                                         <button (click)="onDelete(fornecedor.id)"
-                                            class="btn btn-outline-danger btn-sm ">Excluir</button>
+                                            class="btn btn-outline-danger btn-sm" [disabled]="usuario_logado.Perfil !== 'ADMINISTRADOR'">Excluir</button>
                                     </td>
                                 </tr>
                             </tbody>

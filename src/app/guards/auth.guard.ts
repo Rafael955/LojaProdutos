@@ -4,8 +4,6 @@ import { config } from '../config/environment';
 
 const allowedRoutes: string[] = [
   '/pages/cadastrar-fornecedor',
-  '/pages/cadastrar-produto',
-  '/pages/editar-produto/',
   '/pages/editar-fornecedor/'
 ];
 
