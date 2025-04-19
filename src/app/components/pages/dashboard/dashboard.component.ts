@@ -48,7 +48,7 @@ export class DashboardComponent {
                 dataLabels: { enabled: true }
               }
             },
-            series: [{ data: series, type: 'pie', name: 'Fornecedores' }],
+            series: [{ data: series, type: 'pie', name: 'Produtos' }],
             legend: { enabled: false }
           });
 
