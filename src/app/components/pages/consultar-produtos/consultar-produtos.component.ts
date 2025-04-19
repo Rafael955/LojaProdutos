@@ -24,6 +24,8 @@ export class ConsultarProdutosComponent {
   produtos: any[] = [];
   usuario_logado: any;
 
+  produtoParaSeExcluir: any = '';
+
   p: number = 1;
 
   constructor(private http: HttpClient) { }
@@ -42,23 +44,33 @@ export class ConsultarProdutosComponent {
           this.mensagem_erro = err.error.message;
         }
       })
+
+    this.produtoParaSeExcluir = '';
   }
 
-  onDelete(id: string) {
+  prepareDelete(produto: any) {
+    this.produtoParaSeExcluir = produto;
+  }
 
-      if (confirm('Deseja realmente excluir o produto desejado?')) {
-        this.http.delete(`${config.produtosapi_produtos}/excluir-produto/${id}`)
-          .subscribe({
-            next: (data: any) => {
-              console.log(data.data);
-              this.ngOnInit(); // recarregar a lista
-              this.mensagem = data.message;
-            },
-            error: (err) => {
-              console.log(err.error.message);
-              this.mensagem_erro = err.error.message;
-            }
-          })
-      }
+  onDelete() {
+    
+    const id = this.produtoParaSeExcluir.id;
+
+    this.http.delete(`${config.produtosapi_produtos}/excluir-produto/${id}`)
+      .subscribe({
+        next: (data: any) => {
+          console.log(data.data);
+          this.ngOnInit(); // recarregar a lista
+          this.mensagem = data.message;
+        },
+        error: (err) => {
+          console.log(err.error.message);
+          this.mensagem_erro = err.error.message;
+        }
+      })
+  }
+
+  cancelarExclusao() {
+    this.produtoParaSeExcluir = '';
   }
 }

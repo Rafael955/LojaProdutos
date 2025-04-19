@@ -24,6 +24,8 @@ export class ConsultarFornecedoresComponent {
 
   fornecedores: any[] = [];
 
+  fornecedorParaSeExcluir: any = '';
+
   p: number = 1;
 
   constructor(private http: HttpClient) { }
@@ -42,21 +44,32 @@ export class ConsultarFornecedoresComponent {
           this.mensagem_erro = err.error.message;
         }
       })
+      
+      this.fornecedorParaSeExcluir = '';
   }
 
-  onDelete(id: string) {
+  prepareDelete(fornecedor: any) {
+    this.fornecedorParaSeExcluir = fornecedor;
+  }
 
-    if (confirm('Deseja realmente excluir o fornecedor desejado?')) {
-      this.http.delete(`${config.produtosapi_fornecedores}/excluir-fornecedor/${id}`)
-        .subscribe({
-          next: (data: any) => {
-            this.ngOnInit();
-            this.mensagem = data.message;
-          },
-          error: (err) => {
-            this.mensagem_erro = err.error.message;
-          }
-        })
-    }
+  onDelete() {
+
+    const id = this.fornecedorParaSeExcluir.id;
+
+    this.http.delete(`${config.produtosapi_fornecedores}/excluir-fornecedor/${id}`)
+      .subscribe({
+        next: (data: any) => {
+          this.ngOnInit();
+          this.mensagem = data.message;
+        },
+        error: (err) => {
+          this.mensagem_erro = err.error.message;
+        }
+      })
+
+  }
+
+  cancelarExclusao() {
+    this.fornecedorParaSeExcluir = '';
   }
 }

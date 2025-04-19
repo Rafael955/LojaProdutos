@@ -27,11 +27,8 @@ export class NavbarComponent {
   }
 
   logout() {
-    if(confirm('Deseja realmente realizar o logout do sistema?'))
-    {
-      sessionStorage.removeItem('usuario');
+    sessionStorage.removeItem('usuario');
 
-      location.href = '/pages/autenticar-usuario';
-    }
+    location.href = '/pages/autenticar-usuario';
   }
 }

@@ -35,7 +35,7 @@
                                             class="btn btn-outline-primary btn-sm me-2">
                                             Editar
                                         </button>
-                                        <button (click)="onDelete(fornecedor.id)"
+                                        <button (click)="prepareDelete(fornecedor)" data-bs-toggle="modal" data-bs-target="#painel_confirmacao_exclusao" 
                                             class="btn btn-outline-danger btn-sm" [disabled]="usuario_logado.perfil !== 'ADMINISTRADOR'">Excluir</button>
                                     </td>
                                 </tr>
@@ -53,6 +53,32 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="painel_confirmacao_exclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">
+                    Aviso
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    Deseja realmente excluir o fornecedor <strong>{{ fornecedorParaSeExcluir.nome }}?</strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cancelarExclusao()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="onDelete()">
+                    Excluir Produto
+                </button>
             </div>
         </div>
     </div>

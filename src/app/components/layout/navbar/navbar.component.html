@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-purple">
   <div class="container-fluid">
-    <a class="navbar-brand text-light" href="#">LojaProdutosApp</a>
+    <a class="navbar-brand text-light" [routerLink]="['/pages/dashboard']">LojaProdutosApp</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -8,7 +8,8 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link text-light" routerLink="/pages/dashboard" routerLinkActive="active-link">Dashboard</a>
+          <a class="nav-link text-light" [routerLink]="['/pages/dashboard']"
+            routerLinkActive="active-link">Dashboard</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown"
@@ -47,33 +48,60 @@
 <div class="modal fade" id="painel_usuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
+      <div class="modal-header bg-purple">
+        <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">
           Dados do usuário
         </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <div class="modal-body">
-        <div class="mb-2"> 
-          Usuário: <strong>{{ nome }}</strong> 
+        <div class="mb-2">
+          Usuário: <strong>{{ nome }}</strong>
         </div>
-        <div class="mb-2"> 
-          Email: <strong>{{ email }}</strong> 
+        <div class="mb-2">
+          Email: <strong>{{ email }}</strong>
         </div>
-        <div class="mb-2"> 
-          Perfil: <strong>{{ perfil }}</strong> 
+        <div class="mb-2">
+          Perfil: <strong>{{ perfil }}</strong>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Fechar Janela
         </button>
-        <button type="button" class="btn btn-purple" (click)="logout()">
+        <button type="button" class="btn btn-purple" data-bs-toggle="modal" data-bs-target="#painel_confirmacao_logout">
           Sair do Sistema
         </button>
       </div>
     </div>
   </div>
+</div>
 
+<div class="modal fade" id="painel_confirmacao_logout" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">
+          Aviso
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-2">
+          <strong>Deseja realmente sair do sistema?</strong>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Não
+        </button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="logout()">
+          Sim
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
