@@ -1,9 +1,14 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { registerLocaleData } from '@angular/common';
+
+import ptBR from '@angular/common/locales/pt';
+
+registerLocaleData(ptBR);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,6 +17,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       //registrando o interceptor
       withInterceptors([TokenInterceptor])
-    )
+    ),
+    {
+      provide: LOCALE_ID,
+      useValue: 'pt-BR'
+    }
   ]
 };
