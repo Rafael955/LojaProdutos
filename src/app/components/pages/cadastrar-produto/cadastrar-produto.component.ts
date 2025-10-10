@@ -3,9 +3,12 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
 import { ProdutosService } from '../../../services/produtos.service';
-import { IProdutoRequest } from '../../../interfaces/produto-request';
+import { IProdutoRequest } from '../../../interfaces/produtos/produto-request';
 import { take } from 'rxjs';
 import { FornecedoresService } from '../../../services/fornecedores.service';
+import { IProdutosControllerResponse } from '../../../interfaces/produtos/produtos-controller-response';
+import { IFornecedorResponse } from '../../../interfaces/fornecedores/fornecedor-response';
+import { IFornecedoresControllerResponse } from '../../../interfaces/fornecedores/fornecedores-controller-response';
 
 @Component({
   selector: 'app-cadastrar-produto',
@@ -33,9 +36,9 @@ export class CadastrarProdutoComponent {
     this._fornecedoresService.listarFornecedores()
      .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
+        next: (data: IFornecedoresControllerResponse) => {
           console.log(data.data);
-          this.fornecedores = data.data;
+          this.fornecedores = data.data as IFornecedorResponse[];
         }, 
         error: (err) => {
           this.mensagem_erro = err.error.message;
@@ -65,7 +68,7 @@ export class CadastrarProdutoComponent {
     this._produtosService.cadastrarProduto(novoProduto)
      .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
+        next: (data: IProdutosControllerResponse) => {
           console.log(data.data);
           this.mensagem = data.message; //capturando a mensagem da API
           this.form.reset(); //limpando o formulário

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { config } from '../environments/environment.development';
 import { Observable } from 'rxjs';
-import { IFornecedorProdutosResponse } from '../interfaces/fornecedor-produtos-response';
+import { IFornecedorProdutosResponse } from '../interfaces/fornecedores/fornecedor-produtos-response';
 
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-purple">
   <div class="container-fluid">
-    <a class="navbar-brand text-light" [routerLink]="['/pages/dashboard']">LojaProdutosApp</a>
+    <a class="navbar-brand text-light" routerLink="/pages/dashboard">LojaProdutosApp</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link text-light" [routerLink]="['/pages/dashboard']"
+          <a class="nav-link text-light" routerLink="/pages/dashboard"
             routerLinkActive="active-link">Dashboard</a>
         </li>
         <li class="nav-item dropdown">
@@ -17,8 +17,8 @@
             Produtos
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" [routerLink]="['/pages/cadastrar-produto']">Cadastro de Produtos</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/pages/consultar-produtos']">Consulta de Produtos</a></li>
+            <li><a class="dropdown-item" routerLink="/pages/cadastrar-produto">Cadastro de Produtos</a></li>
+            <li><a class="dropdown-item" routerLink="/pages/consultar-produtos">Consulta de Produtos</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -27,9 +27,9 @@
             Fornecedores
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" [routerLink]="['/pages/cadastrar-fornecedor']">Cadastro de Fornecedores</a>
+            <li><a class="dropdown-item" routerLink="/pages/cadastrar-fornecedor">Cadastro de Fornecedores</a>
             </li>
-            <li><a class="dropdown-item" [routerLink]="['/pages/consultar-fornecedores']">Consulta de Fornecedores</a>
+            <li><a class="dropdown-item" routerLink="/pages/consultar-fornecedores">Consulta de Fornecedores</a>
             </li>
           </ul>
         </li>
@@ -65,6 +65,9 @@
         <div class="mb-2">
           Perfil: <strong>{{ perfil }}</strong>
         </div>
+        <div class="mb-2">
+          Acesso em: <strong>{{ acessoEm | date:'dd/MM/yyyy HH:MM:ss' }}</strong>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -95,11 +98,11 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-          Não
-        </button>
         <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="logout()">
           Sim
+        </button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Não
         </button>
       </div>
     </div>

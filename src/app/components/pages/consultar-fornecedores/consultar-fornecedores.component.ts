@@ -5,6 +5,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
 import { FornecedoresService } from '../../../services/fornecedores.service';
 import { take } from 'rxjs';
+import { IFornecedorResponse } from '../../../interfaces/fornecedores/fornecedor-response';
+import { IFornecedoresControllerResponse } from '../../../interfaces/fornecedores/fornecedores-controller-response';
 
 @Component({
   selector: 'app-consultar-fornecedores',
@@ -36,9 +38,9 @@ export class ConsultarFornecedoresComponent {
     this._fornecedoresService.listarFornecedores()
      .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
+        next: (data: IFornecedoresControllerResponse) => {
           console.log(data.data)
-          this.fornecedores = data.data as any[];
+          this.fornecedores = data.data as IFornecedorResponse[];
         },
         error: (err) => {
           console.error(err.error.message);
@@ -59,7 +61,7 @@ export class ConsultarFornecedoresComponent {
     this._fornecedoresService.excluirFornecedor(id)
      .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
+        next: (data: IFornecedoresControllerResponse) => {
           this.ngOnInit();
           this.mensagem = data.message;
         },

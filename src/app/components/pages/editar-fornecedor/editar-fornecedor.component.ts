@@ -7,7 +7,9 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
 import { FornecedoresService } from '../../../services/fornecedores.service';
 import { take } from 'rxjs';
-import { IFornecedorRequest } from '../../../interfaces/fornecedor-request';
+import { IFornecedorRequest } from '../../../interfaces/fornecedores/fornecedor-request';
+import { IFornecedorResponse } from '../../../interfaces/fornecedores/fornecedor-response';
+import { IFornecedoresControllerResponse } from '../../../interfaces/fornecedores/fornecedores-controller-response';
 
 @Component({
   selector: 'app-editar-fornecedor',
@@ -38,8 +40,10 @@ export class EditarFornecedorComponent {
     this._fornecedoresService.obterFornecedorPorId(this.id)
     .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
-          this.form.patchValue(data.data);
+        next: (data: IFornecedoresControllerResponse) => {
+          const fornecedor = data.data as IFornecedorResponse;
+          console.log(data.data);
+          this.form.patchValue(fornecedor);
         },
         error: (err) => {
           this.mensagem_erro = err.error.message;

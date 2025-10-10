@@ -1,9 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   imports: [
+    CommonModule,
     RouterLink
   ],
   templateUrl: './navbar.component.html',
@@ -15,6 +17,7 @@ export class NavbarComponent {
   nome: string = '';
   email: string = '';
   perfil: string = '';
+  acessoEm: Date = new Date();
 
   ngOnInit() {
     const data = sessionStorage.getItem('usuario');
@@ -24,6 +27,10 @@ export class NavbarComponent {
     this.nome = usuario.nome;
     this.email = usuario.email;
     this.perfil = usuario.perfil;
+    this.acessoEm = new Date(usuario.acessoEm);
+
+    console.log("usuario");
+    console.log(usuario);
   }
 
   logout() {

@@ -7,6 +7,8 @@ import { config } from '../../../environments/environment';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ProdutosService } from '../../../services/produtos.service';
 import { take } from 'rxjs';
+import { IProdutosControllerResponse } from '../../../interfaces/produtos/produtos-controller-response';
+import { IProdutoResponse } from '../../../interfaces/produtos/produto-response';
 
 @Component({
   selector: 'app-consultar-produtos',
@@ -37,9 +39,9 @@ export class ConsultarProdutosComponent {
 
     this._produtosService.listarProdutos()
       .subscribe({
-        next: (data: any) => {
-          console.log(data);
-          this.produtos = data.data as any[];
+        next: (data: IProdutosControllerResponse) => {
+          this.produtos = data.data as IProdutoResponse[];
+          console.log(this.produtos);
         },
         error: (err) => {
           console.log(err.error.message);
@@ -55,14 +57,13 @@ export class ConsultarProdutosComponent {
   }
 
   onDelete() {
-    
     const id = this.produtoParaSeExcluir.id;
 
     this._produtosService.excluirProduto(id)
      .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
-          console.log(data.data);
+        next: (data: IProdutosControllerResponse) => {
+          console.log(data);
           this.ngOnInit(); // recarregar a lista
           this.mensagem = data.message;
         },

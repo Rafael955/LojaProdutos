@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { config } from '../../../environments/environment';
+import { UsuariosService } from '../../../services/usuarios.service';
+import { take } from 'rxjs';
+import { ICriarUsuarioRequest } from '../../../interfaces/usuarios/criar-usuario-request';
+import { ICriarUsuarioResponse } from '../../../interfaces/usuarios/criar-usuario-response';
 
 @Component({
   selector: 'app-criar-usuario',
@@ -20,7 +24,7 @@ export class CriarUsuarioComponent {
   mensagem: string = "";
   mensagem_erro: string = "";
 
-  constructor(private http: HttpClient) {}
+  private readonly _usuariosService = inject(UsuariosService);
 
   form = new FormGroup({
     nome: new FormControl('', [
@@ -55,9 +59,17 @@ export class CriarUsuarioComponent {
     this.mensagem = '';
     this.mensagem_erro = '';
 
-    this.http.post(`${config.usuariosapi}/criar-usuario`, this.form.value)
+    const novoUsuario: ICriarUsuarioRequest = {
+      nome: this.form.value.nome as string,
+      email: this.form.value.email as string,
+      senha: this.form.value.senha as string,
+      confirmarSenha: this.form.value.senha as string
+    }
+
+    this._usuariosService.criarUsuario(novoUsuario)
+     .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
+        next: (data: ICriarUsuarioResponse) => {
           console.log(data);
           this.mensagem = `O usuário ${this.form.value.nome} foi cadastrado com sucesso!`;
           this.form.reset(); //limpando o formulário

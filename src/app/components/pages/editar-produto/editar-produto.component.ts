@@ -1,13 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { config } from '../../../environments/environment';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
 import { ProdutosService } from '../../../services/produtos.service';
-import { IProdutoRequest } from '../../../interfaces/produto-request';
 import { take } from 'rxjs';
+import { IProdutoRequest } from '../../../interfaces/produtos/produto-request';
+import { FornecedoresService } from '../../../services/fornecedores.service';
+import { IProdutosControllerResponse } from '../../../interfaces/produtos/produtos-controller-response';
+import { IProdutoResponse } from '../../../interfaces/produtos/produto-response';
+import { IFornecedoresControllerResponse } from '../../../interfaces/fornecedores/fornecedores-controller-response';
+import { IFornecedorResponse } from '../../../interfaces/fornecedores/fornecedor-response';
 
 @Component({
   selector: 'app-editar-produto',
@@ -34,16 +37,17 @@ export class EditarProdutoComponent {
   constructor(private activatedRoute: ActivatedRoute) { }
 
   private readonly _produtosService = inject(ProdutosService);
+  private readonly _fornecedoresService = inject(FornecedoresService);
 
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id') as string;
 
-    this._produtosService.obterProduto(this.id)
+    this._fornecedoresService.listarFornecedores()
     .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
+        next: (data: IFornecedoresControllerResponse) => {
           console.log(data);
-          this.form.patchValue(data.data);
+          this.fornecedores = data.data as IFornecedorResponse[]
         },
         error: (err) => {
           console.error(err.error.message);
@@ -51,12 +55,15 @@ export class EditarProdutoComponent {
         }
       })
 
-    this._produtosService.listarProdutos()
+    this._produtosService.obterProduto(this.id)
     .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
-          console.log(data);
-          this.fornecedores = data.data as any[]
+        next: (data: IProdutosControllerResponse) => {
+          console.log(data.data);
+          
+          const produto = data.data as IProdutoResponse;
+          
+          this.form.patchValue(produto);
         },
         error: (err) => {
           console.error(err.error.message);
@@ -87,7 +94,7 @@ export class EditarProdutoComponent {
     this._produtosService.alterarProduto(this.id, produtoAlterar)
     .pipe(take(1))
       .subscribe({
-        next: (data: any) => {
+        next: (data: IProdutosControllerResponse) => {
           console.log(data);
           this.mensagem = data.message; //capturando a mensagem da API
         }, error: (err) => {
