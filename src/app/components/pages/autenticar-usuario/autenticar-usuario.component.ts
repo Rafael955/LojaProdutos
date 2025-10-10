@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { config } from '../../../config/environment';
+import { config } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -18,7 +18,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AutenticarUsuarioComponent {
   mensagem_erro: string = "";
-
 
   constructor(private http: HttpClient) { }
 

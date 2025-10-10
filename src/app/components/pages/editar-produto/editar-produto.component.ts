@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { config } from '../../../config/environment';
+import { config } from '../../../environments/environment';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
+import { ProdutosService } from '../../../services/produtos.service';
+import { IProdutoRequest } from '../../../interfaces/produto-request';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-editar-produto',
@@ -28,14 +31,15 @@ export class EditarProdutoComponent {
 
   id: string = "";
 
-  constructor(private http: HttpClient,
-    private activatedRoute: ActivatedRoute) { }
+  constructor(private activatedRoute: ActivatedRoute) { }
+
+  private readonly _produtosService = inject(ProdutosService);
 
   ngOnInit() {
-
     this.id = this.activatedRoute.snapshot.paramMap.get('id') as string;
 
-    this.http.get(`${config.produtosapi_produtos}/obter-produto/${this.id}`)
+    this._produtosService.obterProduto(this.id)
+    .pipe(take(1))
       .subscribe({
         next: (data: any) => {
           console.log(data);
@@ -47,7 +51,8 @@ export class EditarProdutoComponent {
         }
       })
 
-    this.http.get(`${config.produtosapi_fornecedores}/listar-fornecedores`)
+    this._produtosService.listarProdutos()
+    .pipe(take(1))
       .subscribe({
         next: (data: any) => {
           console.log(data);
@@ -62,8 +67,8 @@ export class EditarProdutoComponent {
 
   form = new FormGroup({
     nome: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
-    preco: new FormControl('', [Validators.required, Validators.max(99999999.99)]),
-    quantidade: new FormControl('', [Validators.required]),
+    preco: new FormControl(0, [Validators.required, Validators.max(99999999.99)]),
+    quantidade: new FormControl(0, [Validators.required]),
     fornecedorId: new FormControl('', [Validators.required])
   });
 
@@ -72,10 +77,18 @@ export class EditarProdutoComponent {
     this.mensagem_erro = '';
 
     //console.log(this.form.value); //exibindo no console os dados do formulário
-    this.http.put(`${config.produtosapi_produtos}/alterar-produto/${this.id}`, this.form.value)
+    const produtoAlterar: IProdutoRequest = {
+      nome: this.form.value.nome as string,
+      preco:  this.form.value.preco as number,
+      quantidade:  this.form.value.quantidade as number,
+      fornecedorId:  this.form.value.fornecedorId as string
+    };
+    
+    this._produtosService.alterarProduto(this.id, produtoAlterar)
+    .pipe(take(1))
       .subscribe({
         next: (data: any) => {
-          console.log(data.data);
+          console.log(data);
           this.mensagem = data.message; //capturando a mensagem da API
         }, error: (err) => {
           // console.error(err);

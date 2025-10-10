@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { config } from '../../../config/environment';
+import { config } from '../../../environments/environment';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ProdutosService } from '../../../services/produtos.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-consultar-produtos',
@@ -28,12 +30,12 @@ export class ConsultarProdutosComponent {
 
   p: number = 1;
 
-  constructor(private http: HttpClient) { }
+  private readonly _produtosService = inject(ProdutosService);
 
   ngOnInit() {
     this.usuario_logado = JSON.parse(sessionStorage.getItem('usuario') as string);
 
-    this.http.get(config.produtosapi_produtos + '/listar-produtos')
+    this._produtosService.listarProdutos()
       .subscribe({
         next: (data: any) => {
           console.log(data);
@@ -56,7 +58,8 @@ export class ConsultarProdutosComponent {
     
     const id = this.produtoParaSeExcluir.id;
 
-    this.http.delete(`${config.produtosapi_produtos}/excluir-produto/${id}`)
+    this._produtosService.excluirProduto(id)
+     .pipe(take(1))
       .subscribe({
         next: (data: any) => {
           console.log(data.data);

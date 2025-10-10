@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { config } from '../../../config/environment';
+import { config } from '../../../environments/environment';
 
 @Component({
   selector: 'app-criar-usuario',
@@ -60,6 +60,7 @@ export class CriarUsuarioComponent {
         next: (data: any) => {
           console.log(data);
           this.mensagem = `O usuário ${this.form.value.nome} foi cadastrado com sucesso!`;
+          this.form.reset(); //limpando o formulário
         },
         error: (err) => {
           this.mensagem_erro = err.error.message;

@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { config } from '../../../config/environment';
+import { config } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
+import { FornecedoresService } from '../../../services/fornecedores.service';
+import { take } from 'rxjs';
+import { IFornecedorRequest } from '../../../interfaces/fornecedor-request';
 
 @Component({
   selector: 'app-editar-fornecedor',
@@ -25,13 +28,15 @@ export class EditarFornecedorComponent {
   mensagem: string = "";
   mensagem_erro: string = "";
 
-  constructor(private http: HttpClient, private activatedRouter: ActivatedRoute) { }
+  constructor(private activatedRouter: ActivatedRoute) { }
+
+  private readonly _fornecedoresService = inject(FornecedoresService);
 
   ngOnInit() {
-
     this.id = this.activatedRouter.snapshot.paramMap.get('id') as string;
 
-    this.http.get(`${config.produtosapi_fornecedores}/obter-fornecedor/${this.id}`)
+    this._fornecedoresService.obterFornecedorPorId(this.id)
+    .pipe(take(1))
       .subscribe({
         next: (data: any) => {
           this.form.patchValue(data.data);
@@ -51,7 +56,11 @@ export class EditarFornecedorComponent {
     this.mensagem = '';
     this.mensagem_erro = '';
 
-    this.http.put(`${config.produtosapi_fornecedores}/alterar-fornecedor/${this.id}`, this.form.value)
+    const fornecedorAlterar: IFornecedorRequest = {
+      nome: this.form.value.nome as string
+    }
+
+    this._fornecedoresService.alterarFornecedor(this.id, fornecedorAlterar)
       .subscribe({
         next: (data: any) => {
           this.mensagem = data.message;

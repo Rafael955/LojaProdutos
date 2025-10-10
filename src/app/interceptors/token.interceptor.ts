@@ -1,5 +1,5 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { config } from '../config/environment';
+import { config } from '../environments/environment';
 
 const allowedUrls: string[] = [
   config.produtosapi_dashboard,

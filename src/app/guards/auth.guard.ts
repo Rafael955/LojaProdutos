@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
-import { config } from '../config/environment';
 
-const allowedRoutes: string[] = [
+const adminOnlyRoutes: string[] = [
   '/pages/cadastrar-fornecedor',
   '/pages/editar-fornecedor/'
 ];
@@ -17,7 +16,7 @@ class PermissionsService {
 
     if (usuario) {
 
-      if (allowedRoutes.some(url => state.url.includes(url))) {
+      if (adminOnlyRoutes.some(url => state.url.includes(url))) {
 
         if (usuario.perfil === 'ADMINISTRADOR') {
           return true;

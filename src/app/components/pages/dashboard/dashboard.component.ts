@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Chart, ChartModule } from 'angular-highcharts';
-import { config } from '../../../config/environment';
+import { config } from '../../../environments/environment';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
+import { FornecedorProdutosService } from '../../../services/fornecedor-produtos.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,10 +23,10 @@ export class DashboardComponent {
 
   mensagem_erro: string = '';
 
-  constructor(private http: HttpClient) { }
+  private readonly _fornecedorProdutosService = inject(FornecedorProdutosService);
 
   ngOnInit() {
-    this.http.get(`${config.produtosapi_dashboard}/obter-dados-fornecedores-produtos`)
+    this._fornecedorProdutosService.obterDadosFornecedorProdutos()
       .subscribe({
         next: (data: any) => {
           this.dados = data as any[];

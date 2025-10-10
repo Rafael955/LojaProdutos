@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { config } from '../../../config/environment';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
+import { ProdutosService } from '../../../services/produtos.service';
+import { IProdutoRequest } from '../../../interfaces/produto-request';
+import { take } from 'rxjs';
+import { FornecedoresService } from '../../../services/fornecedores.service';
 
 @Component({
   selector: 'app-cadastrar-produto',
@@ -22,12 +24,14 @@ export class CadastrarProdutoComponent {
   mensagem_erro: string = '';
   
   fornecedores: any[] = [];
-
-  constructor(private http: HttpClient) {}
+  
+  private readonly _produtosService = inject(ProdutosService);
+  private readonly _fornecedoresService = inject(FornecedoresService);
 
   ngOnInit()
   {
-    this.http.get(`${config.produtosapi_fornecedores}/listar-fornecedores`)
+    this._fornecedoresService.listarFornecedores()
+     .pipe(take(1))
       .subscribe({
         next: (data: any) => {
           console.log(data.data);
@@ -41,19 +45,25 @@ export class CadastrarProdutoComponent {
 
   form = new FormGroup({
     nome: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(150)]),
-    preco: new FormControl('', [Validators.required, Validators.max(99999999.99)]),
-    quantidade: new FormControl('',[Validators.required]),
+    preco: new FormControl(0, [Validators.required, Validators.max(99999999.99)]),
+    quantidade: new FormControl(0,[Validators.required]),
     fornecedorId: new FormControl('',[Validators.required])
   });
 
 
-  onSubmit()
-  {
+  onSubmit() {
     this.mensagem = '';
     this.mensagem_erro = '';
 
-    //console.log(this.form.value); //exibindo no console os dados do formulário
-    this.http.post(`${config.produtosapi_produtos}/cadastrar-produto`, this.form.value)
+    const novoProduto: IProdutoRequest = {
+      nome: this.form.value.nome as string,
+      preco:  this.form.value.preco as number,
+      quantidade:  this.form.value.quantidade as number,
+      fornecedorId:  this.form.value.fornecedorId as string
+    };
+
+    this._produtosService.cadastrarProduto(novoProduto)
+     .pipe(take(1))
       .subscribe({
         next: (data: any) => {
           console.log(data.data);

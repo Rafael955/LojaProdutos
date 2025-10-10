@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { config } from '../../../config/environment';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
+import { FornecedoresService } from '../../../services/fornecedores.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-consultar-fornecedores',
@@ -28,12 +28,13 @@ export class ConsultarFornecedoresComponent {
 
   p: number = 1;
 
-  constructor(private http: HttpClient) { }
+  private readonly _fornecedoresService = inject(FornecedoresService);
 
   ngOnInit() {
     this.usuario_logado = JSON.parse(sessionStorage.getItem('usuario') as string);
 
-    this.http.get(`${config.produtosapi_fornecedores}/listar-fornecedores`)
+    this._fornecedoresService.listarFornecedores()
+     .pipe(take(1))
       .subscribe({
         next: (data: any) => {
           console.log(data.data)
@@ -53,10 +54,10 @@ export class ConsultarFornecedoresComponent {
   }
 
   onDelete() {
-
     const id = this.fornecedorParaSeExcluir.id;
 
-    this.http.delete(`${config.produtosapi_fornecedores}/excluir-fornecedor/${id}`)
+    this._fornecedoresService.excluirFornecedor(id)
+     .pipe(take(1))
       .subscribe({
         next: (data: any) => {
           this.ngOnInit();
