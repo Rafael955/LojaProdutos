@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -26,6 +26,7 @@ import { IFornecedorResponse } from '../../../interfaces/fornecedores/fornecedor
 })
 export class EditarProdutoComponent {
 
+  productImageBase64 = '';
   mensagem: string = "";
   mensagem_erro: string = "";
 
@@ -34,10 +35,13 @@ export class EditarProdutoComponent {
 
   id: string = "";
 
+  @ViewChild('imageInput') imagemProduto!: ElementRef<HTMLInputElement>;
+  
   constructor(private activatedRoute: ActivatedRoute) { }
 
   private readonly _produtosService = inject(ProdutosService);
   private readonly _fornecedoresService = inject(FornecedoresService);
+
 
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id') as string;
@@ -62,8 +66,10 @@ export class EditarProdutoComponent {
           console.log(data.data);
           
           const produto = data.data as IProdutoResponse;
+          console.log(this.imagemProduto.nativeElement.value);
           
           this.form.patchValue(produto);
+          this.productImageBase64 = produto.imageBase64 as string;
         },
         error: (err) => {
           console.error(err.error.message);
@@ -88,7 +94,8 @@ export class EditarProdutoComponent {
       nome: this.form.value.nome as string,
       preco:  this.form.value.preco as number,
       quantidade:  this.form.value.quantidade as number,
-      fornecedorId:  this.form.value.fornecedorId as string
+      fornecedorId:  this.form.value.fornecedorId as string,
+      imageBase64: this.productImageBase64
     };
     
     this._produtosService.alterarProduto(this.id, produtoAlterar)
@@ -102,5 +109,33 @@ export class EditarProdutoComponent {
           this.mensagem_erro = err.error.message;
         }
       })
+  }
+
+  onFileSelected(event: Event) {
+   const input = event.target as HTMLInputElement;
+
+   if(input.files && input.files.length > 0) {
+    const file = input.files[0];
+
+    this.convertFileToBase64(file);
+   }
+  }
+
+  convertFileToBase64(file: File) {
+    const reader = new FileReader(); 
+    
+    reader.onload = (e : any) => {
+      const imageBase64 = e.target.result as string; //Pega texto da imagem em base 64
+
+      this.productImageBase64 = imageBase64;
+
+      console.log(imageBase64);
+    }
+
+    reader.onerror = (_) => {
+      this.productImageBase64 = '';
+    }
+
+    reader.readAsDataURL(file);
   }
 }

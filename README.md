@@ -23,9 +23,35 @@ LojaProdutosApp é uma aplicação web desenvolvida em Angular que oferece uma i
 - Angular Router
 - Bootstrap
 
+## 📋 Requisitos
+- Node.js (versão LTS recomendada)
+- npm ou yarn
+- Angular CLI (opcional para desenvolvimento local)
+
 ## 🚀 Como Executar o Projeto
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/LojaProdutosApp.git
-   cd LojaProdutosApp
+   git clone <repo-url>
+   cd LojaProdutosWeb
+   ```
+2. Instale dependências:
+   ```bash
+   npm install
+   # ou
+   yarn
+   ```
+3. Inicie em modo de desenvolvimento:
+   ```bash
+   npm run start
+   # ou
+   ng serve
+   ```
+   Aplicação disponível em http://localhost:4200
+
+## 🛠️ Build para produção
+```bash
+npm run build
+# ou
+ng build --configuration production
+```

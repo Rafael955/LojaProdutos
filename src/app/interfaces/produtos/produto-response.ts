@@ -6,4 +6,5 @@ export interface IProdutoResponse {
     total: number;
     fornecedorId: string;
     nomeFornecedor: string;
+    imageBase64: string;
 }
